@@ -1,116 +1,60 @@
-import streamlit as stimport streamlit as st
-
+import streamlit as st
 import torch
-
-st.set_page_config(import whisper
-
-    page_title="🎙 Yaaba AI Voice Translator",import soundfile as sf
-
-    page_icon="🎙",import numpy as np
-
-    layout="wide"from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
-
-)from TTS.api import TTS
-
+import whisper
+import soundfile as sf
+import numpy as np
+from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
+from TTS.api import TTS
 import tempfile
+import os
+from datetime import datetime
+import io
 
-st.markdown("""import os
-
-<div style="text-align: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 10px; margin-bottom: 20px;">from datetime import datetime
-
-    <h1>🎙 Yaaba AI – French ↔ Mooré Voice Translator</h1>import io
-
-</div>
-
-""", unsafe_allow_html=True)# Set page config
-
+# Set page config
 st.set_page_config(
+    page_title="🎙 Yaaba AI Voice Translator",
+    page_icon="🎙",
+    layout="wide",
+    initial_sidebar_state="collapsed"
+)
 
-st.markdown("""    page_title="🎙 Yaaba AI Voice Translator",
-
-<div style="text-align: center; font-size: 16px; color: #555; margin: 20px 0; line-height: 1.6;">    page_icon="🎙",
-
-    <p>Bridge the gap between African and global languages with AI-powered translation.     layout="wide",
-
-    Yaaba AI enables seamless communication between French and Mooré (Moore),     initial_sidebar_state="collapsed"
-
-    one of West Africa's major languages, through advanced speech recognition, )
-
-    neural machine translation, and text-to-speech synthesis.</p>
-
-</div># Custom CSS
-
-""", unsafe_allow_html=True)st.markdown("""
-
+# Custom CSS
+st.markdown("""
 <style>
-
-st.success("🎉 Yaaba AI Voice Translator is successfully deployed!")    .main-header {
-
-st.info("🔄 AI models are being prepared. Full functionality will be available in the next update.")        text-align: center;
-
+    .main-header {
+        text-align: center;
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-
-tab1, tab2 = st.tabs(["🎤 Voice Translation", "📝 Text Translation"])        color: white;
-
+        color: white;
         padding: 20px;
-
-with tab1:        border-radius: 10px;
-
-    st.subheader("Voice Translation")        margin-bottom: 20px;
-
-    direction = st.radio("Translation Direction", ["French → Mooré", "Mooré → French"])    }
-
-    st.info("🎤 Voice recording will be available once AI models are loaded.")    
-
-        .description-text {
-
-    col1, col2 = st.columns(2)        text-align: center;
-
-    with col1:        font-size: 16px;
-
-        st.text_area("Detected Text", placeholder="Your spoken words will appear here...", height=100, disabled=True)        color: #555;
-
-    with col2:        margin: 20px 0;
-
-        st.text_area("Translation", placeholder="Translation will appear here...", height=100, disabled=True)        line-height: 1.6;
-
+        border-radius: 10px;
+        margin-bottom: 20px;
     }
-
-with tab2:    
-
-    st.subheader("Text Translation")    .footer-credit {
-
-    text_direction = st.radio("Translation Direction", ["French → Mooré", "Mooré → French"], key="text_dir")        text-align: center;
-
-            font-size: 12px;
-
-    text_input = st.text_area("Enter text to translate:", placeholder="Type your text here...", height=100)        color: #888;
-
-            margin-top: 30px;
-
-    if st.button("🔄 Translate Text"):        padding: 10px;
-
-        if text_input:        border-top: 1px solid #eee;
-
-            st.success("Translation feature will be activated in the next update with AI models!")    }
-
-        else:    
-
-            st.warning("Please enter some text to translate.")    .stButton > button {
-
+    
+    .description-text {
+        text-align: center;
+        font-size: 16px;
+        color: #555;
+        margin: 20px 0;
+        line-height: 1.6;
+    }
+    
+    .footer-credit {
+        text-align: center;
+        font-size: 12px;
+        color: #888;
+        margin-top: 30px;
+        padding: 10px;
+        border-top: 1px solid #eee;
+    }
+    
+    .stButton > button {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-
-st.markdown("""        color: white;
-
-<div style="text-align: center; font-size: 12px; color: #888; margin-top: 30px; padding: 10px; border-top: 1px solid #eee;">        border: none;
-
-    <p>Built by <strong>GO AI Corp</strong> – <em>Yaaba AI Initiative</em></p>        border-radius: 5px;
-
-    <p>Empowering African languages through artificial intelligence</p>        padding: 10px 20px;
-
-</div>        font-weight: bold;
-
-""", unsafe_allow_html=True)    }
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        font-weight: bold;
+    }
     
     .translation-box {
         background-color: #f8f9fa;

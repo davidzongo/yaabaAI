@@ -100,7 +100,7 @@ def main():
     # Footer
     st.markdown("""
     <div class="footer-credit">
-        <p>Built by <strong>GO AI Corp</strong> – <em>Yaaba AI Initiative</em></p>
+        <p>Built by <strong>ZONGoTECH</strong> – <em>Yaaba AI Initiative</em></p>
         <p>Empowering African languages through artificial intelligence</p>
     </div>
     """, unsafe_allow_html=True)
